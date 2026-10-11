@@ -1,13 +1,18 @@
 "use client";
 import { useState } from "react";
-import { useFrontendTool, useAgentContext } from "@copilotkit/react-core/v2";
+import {
+  useFrontendTool,
+  useAgentContext,
+  useAgent,
+} from "@copilotkit/react-core/v2";
 import { z } from "zod";
 
 export type Todo = { id: string; text: string; completed: boolean };
 
 export function useTodos() {
   const [todos, setTodos] = useState<Todo[]>([]);
-
+  const { agent } = useAgent({ agentId: "main_assistant" });
+  console.log(agent, "agent data");
   const add = (text: string) => {
     const id = crypto.randomUUID();
     setTodos((p) => [...p, { id, text, completed: false }]);

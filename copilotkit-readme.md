@@ -15,7 +15,7 @@ Build a proof of concept (POC) of CopilotKit with the AG-UI protocol on a simple
 | Frontend               | Next.js (App Router, TypeScript, Tailwind)                                                                                 |
 | Backend                | FastAPI (Python)                                                                                                           |
 | Agent framework        | LangGraph                                                                                                                  |
-| LLM                    | Groq Cloud, `llama-3.3-70b-versatile` (the 8B instant model was unreliable at tool calling)                                |
+| LLM                    | Groq Cloud, `openai/gpt-oss-120b` (the 8B instant model was unreliable at tool calling)                                    |
 | Chat UI                | **Custom chatbot built by hand.** Do NOT use the prebuilt `<CopilotChat>` / `<CopilotSidebar>`                             |
 | Todo actions           | add, edit text, delete, mark completed / not completed                                                                     |
 | Extra behaviour wanted | The agent must also answer normal questions and answer questions about the todo list ("how many todos?", "what are they?") |
@@ -126,7 +126,7 @@ copilotkit-poc/
     .env                  # GROQ_API_KEY=...
     graph.py              # LangGraph agent
     main.py               # FastAPI + AG-UI endpoint at /copilotkit
-  web/                    # Next.js
+  frontend/                    # Next.js
     .env.local            # AGENT_URL=http://localhost:8000/copilotkit
     app/
       layout.tsx
@@ -143,7 +143,7 @@ Run (two terminals):
 # Terminal 1
 cd agent; .\.venv\Scripts\Activate.ps1; python main.py      # http://localhost:8000/health
 # Terminal 2
-cd web; npm run dev                                          # http://localhost:3000
+cd frontend; npm run dev                                          # http://localhost:3000
 ```
 
 Packages:
