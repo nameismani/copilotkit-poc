@@ -10,9 +10,10 @@
   },
   "dependencies": {
     "@ag-ui/client": "^1.0.2",
-    "@copilotkit/react-core": "^1.78.0",
-    "@copilotkit/runtime": "^1.78.0",
+    "@copilotkit/react-core": "1.53.0",
+    "@copilotkit/runtime": "1.53.0",
     "@copilotkit/runtime-client-gql": "^1.78.0",
+    "@copilotkit/shared": "1.53.0",
     "@tanstack/react-query": "^5.104.1",
     "next": "16.4.0",
     "react": "19.3.0",

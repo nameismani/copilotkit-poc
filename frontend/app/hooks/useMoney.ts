@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAgent, UseAgentUpdate } from "@copilotkit/react-core/v2";
+import { useCoAgent } from "@copilotkit/react-core"; // v1 (v2: useAgent)
 import { moneyApi, type Tx } from "@/lib/moneyApi";
 
 export const MONEY_KEY = ["money"] as const;
@@ -10,13 +10,10 @@ export function useMoney() {
   const qc = useQueryClient();
   const refresh = () => qc.invalidateQueries({ queryKey: MONEY_KEY });
 
-  // Re-render only when the run status changes, not on every streamed token
-  const { agent } = useAgent({
-    agentId: "main_assistant",
-    updates: [UseAgentUpdate.OnRunStatusChanged],
-  });
-  const isRunning = agent.isRunning;
-
+  // v1: "is the agent running?"  (UNTESTED: if useCoAgent causes odd state syncing, use
+  //   const { isLoading: isRunning } = useCopilotChatHeadless_c();  instead)
+  const { running: isRunning, state } = useCoAgent({ name: "main_assistant" });
+  console.log(state, "messaages", state?.messaages);
   // Refetch once when a run finishes (running -> idle)
   const wasRunning = useRef(false);
   useEffect(() => {
@@ -24,8 +21,7 @@ export function useMoney() {
     wasRunning.current = isRunning;
   }, [isRunning]);
 
-  // Optional: poll every second only while the agent is running (live rows).
-  // Delete both refetchInterval lines if you only want the refresh at the end.
+  // Poll every second only while the agent is running (remove to refresh only at the end)
   const poll = isRunning ? 1000 : false;
 
   const transactions = useQuery({

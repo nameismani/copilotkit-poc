@@ -1,8 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
-import { useAgentContext } from "@copilotkit/react-core/v2";
+import { useCopilotReadable } from "@copilotkit/react-core"; // v1 (v2: useAgentContext)
 import ChatPanel from "./ChatPanel";
 
 const LINKS = [
@@ -12,10 +11,9 @@ const LINKS = [
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const qc = useQueryClient();
 
-  // Tell the agent which page the user is on (one place for every page)
-  useAgentContext({
+  // Tell the agent which page the user is on
+  useCopilotReadable({
     description: "The page the user is currently on.",
     value:
       pathname === "/"
@@ -25,7 +23,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="grid h-screen grid-cols-[7fr_3fr] overflow-hidden">
-      {/* 70%: the current page */}
       <main className="min-h-0 min-w-0 overflow-y-auto p-6">
         <nav className="mb-6 flex gap-2 border-b">
           {LINKS.map((l) => (
@@ -45,14 +42,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         {children}
       </main>
 
-      {/* 30%: ONE chat for the whole app, mounted once, never remounts on navigation */}
       <aside className="min-h-0 min-w-0 border-l bg-white">
         <ChatPanel
           agentId="main_assistant"
           title="Assistant"
           placeholder='Try: "add todo buy milk" or "spent 250 on lunch"'
-          // The agent can change money data from any page, so refresh it after every run
-          //   onRunFinished={() => qc.invalidateQueries({ queryKey: ["money"] })}
         />
       </aside>
     </div>
